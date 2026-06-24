@@ -1,7 +1,17 @@
-export default function Home() {
+import Hero from "@/components/home/Hero";
+import FeaturedEbooks from "@/components/home/FeaturedEbooks";
+import TopWriters from "@/components/home/TopWriters";
+import Genres from "@/components/home/Genres";
+
+export const metadata = { title: "Home" };
+
+export default function HomePage() {
   return (
-    <div>
-      <h2 className="font-bold text-2xl">Home Page</h2>
-    </div>
+    <>
+      <Hero />
+      <FeaturedEbooks />
+      <TopWriters />
+      <Genres />
+    </>
   );
 }
