@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { HiArrowRight } from "react-icons/hi";
 
+
+// this is the featured book section which i will create dynamicly
 const EbookCard = ({ ebook }) => (
   <div className="bg-[#1A1333] rounded-2xl overflow-hidden border border-[#241B45] hover:border-[#7C3AED]/50 transition-all hover:-translate-y-1 group">
     <div className="h-48 bg-gradient-to-br from-[#7C3AED]/30 to-[#241B45] flex items-center justify-center overflow-hidden">
