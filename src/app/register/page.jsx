@@ -9,19 +9,20 @@ import {
   Label,
   TextField
 } from "@heroui/react";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const onSubmit = async (e) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
 
     if (user.password !== user.confirmPassword) {
-      alert("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -33,18 +34,34 @@ export default function RegisterPage() {
     });
 
     if (data) {
-      redirect("/login");
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/token`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: user.email,
+          name: user.name,
+          image: user.image || "",
+          role: user.role,
+        }),
+      });
+      toast.success("Registered successfully!");
+      router.push("/login");
     }
 
     if (error) {
-      alert(error.message || "Invalid information");
+      toast.error(error.message || "Registration failed");
     }
   };
 
+  const handleGooglesignin = async () => {
+    await authClient.signIn.social({
+      provider: "google"
+    })
+  }
   return (
     <Form
       onSubmit={onSubmit}
-     className="flex w-120 flex-col gap-4 container mx-auto p-10 mt-10 mb-10 rounded-2xl border border-[#241B45] bg-linear-to-b from-[#1A1333] via-[#21183F] to-[#2B1E56] shadow-[0_10px_40px_rgba(124,58,237,0.25)]"
+      className="flex w-120 flex-col gap-4 container mx-auto p-10 mt-10 mb-10 rounded-2xl border border-[#241B45] bg-linear-to-b from-[#1A1333] via-[#21183F] to-[#2B1E56] shadow-[0_10px_40px_rgba(124,58,237,0.25)]"
     >
       <div className="flex flex-col items-center justify-center mb-2">
         <p className="font-bold text-2xl mt-3 text-white">
@@ -116,6 +133,19 @@ export default function RegisterPage() {
         <Input placeholder="Confirm your password" />
         <FieldError />
       </TextField>
+      <div className="flex flex-col gap-2">
+        <label className="text-white text-sm">I want to join as</label>
+        <div className="flex gap-3">
+          <label className="flex-1 flex items-center gap-2 bg-[#241B45] border border-[#241B45] rounded-xl px-4 py-3 cursor-pointer hover:border-violet-500 transition-colors">
+            <input type="radio" name="role" value="user" defaultChecked className="accent-violet-600" />
+            <span className="text-white">Reader</span>
+          </label>
+          <label className="flex-1 flex items-center gap-2 bg-[#241B45] border border-[#241B45] rounded-xl px-4 py-3 cursor-pointer hover:border-violet-500 transition-colors">
+            <input type="radio" name="role" value="writer" className="accent-violet-600" />
+            <span className="text-white">Writer</span>
+          </label>
+        </div>
+      </div>
 
       <Button
         className="
@@ -140,6 +170,7 @@ export default function RegisterPage() {
       </div>
 
       <Button
+        onClick={handleGooglesignin}
         className="
           w-full
           rounded-xl
