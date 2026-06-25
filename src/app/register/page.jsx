@@ -31,6 +31,7 @@ export default function RegisterPage() {
       image: user.image,
       name: user.name,
       password: user.password,
+       role: user.role,
     });
 
     if (data) {

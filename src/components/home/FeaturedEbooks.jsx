@@ -3,13 +3,17 @@ import { HiArrowRight } from "react-icons/hi";
 
 const EbookCard = ({ ebook }) => (
   <div className="bg-[#1A1333] rounded-2xl overflow-hidden border border-[#241B45] hover:border-[#7C3AED]/50 transition-all hover:-translate-y-1 group">
-    <div className="h-48 bg-linear-to-br from-[#7C3AED]/30 to-[#241B45] flex items-center justify-center">
-      <span className="text-6xl">📖</span>
+    <div className="h-48 bg-gradient-to-br from-[#7C3AED]/30 to-[#241B45] flex items-center justify-center overflow-hidden">
+      {ebook.coverImage ? (
+        <img src={ebook.coverImage} alt={ebook.title} className="w-full h-full object-cover" />
+      ) : (
+        <span className="text-6xl">📖</span>
+      )}
     </div>
     <div className="p-5">
       <span className="text-xs text-[#7C3AED] font-medium uppercase tracking-wide">{ebook.genre}</span>
       <h3 className="text-white font-bold text-lg mt-1 mb-1">{ebook.title}</h3>
-      <p className="text-gray-400 text-sm mb-3">by {ebook.writer}</p>
+      <p className="text-gray-400 text-sm mb-3">by {ebook.writerName || ebook.writer}</p>
       <div className="flex items-center justify-between">
         <span className="text-[#F59E0B] font-bold">${ebook.price}</span>
         <Link href={`/ebooks/${ebook._id}`} className="text-[#7C3AED] text-sm hover:underline flex items-center gap-1">
@@ -47,7 +51,7 @@ const FeaturedEbooks = async () => {
           <p className="text-[#7C3AED] text-sm font-medium uppercase tracking-wide mb-2">handpicked for you</p>
           <h2 className="text-4xl md:text-5xl font-bold text-white">Featured Ebooks</h2>
         </div>
-        <Link href="/browse" className="hidden md:flex items-center gap-2 text-text-gray-400 hover:text-white transition-colors">
+        <Link href="/browse" className="hidden md:flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
           View all <HiArrowRight />
         </Link>
       </div>
